@@ -10,7 +10,7 @@
 
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
+
 <style>
 *{
     margin:0;
@@ -20,7 +20,7 @@
 }
 body{
     background:#f4f6f8;
-    padding-bottom:70px;
+    padding-bottom:80px;
 }
 
 /* TOP NAV */
@@ -47,39 +47,41 @@ body{
 
 /* SEARCH BOX */
 .search-box{
-    margin-top:75px;
-    background:#fff;
+    margin-top:80px;
     padding:15px;
-    border-radius:14px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    background:#fff;
+    border-radius:16px;
     margin-left:15px;
     margin-right:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 .search-row{
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:8px;
 }
 .search-row input{
-    flex:1;
+    width:100%;
     padding:10px;
     border-radius:10px;
     border:1px solid #ccc;
     font-size:14px;
 }
 .swap-btn{
-    font-size:20px;
-    color:#0a3d62;
+    background:#0a3d62;
+    color:#fff;
+    padding:10px;
+    border-radius:50%;
     cursor:pointer;
 }
 .search-btn{
     margin-top:10px;
     width:100%;
-    padding:10px;
-    border:none;
-    border-radius:10px;
     background:#0a3d62;
     color:#fff;
+    padding:10px;
+    border:none;
+    border-radius:12px;
     font-size:15px;
     cursor:pointer;
 }
@@ -98,12 +100,7 @@ body{
 .bus-card h3{
     color:#0a3d62;
 }
-.bus-card p{
-    font-size:14px;
-    color:#444;
-}
 .time{
-    margin-top:6px;
     font-weight:600;
     color:#27ae60;
 }
@@ -131,7 +128,6 @@ body{
 }
 .active{
     font-weight:600;
-    color:#0a3d62;
 }
 </style>
 </head>
@@ -147,9 +143,11 @@ body{
 <!-- SEARCH -->
 <div class="search-box">
     <div class="search-row">
-        <input type="text" id="from" placeholder="From (City)">
-        <i class="fa fa-arrow-right-arrow-left swap-btn" onclick="swapLocation()"></i>
-        <input type="text" id="to" placeholder="To (City)">
+        <input type="text" id="from" placeholder="From (e.g. Bhubaneswar)">
+        <div class="swap-btn" onclick="swapLocation()">
+            <i class="fa fa-right-left"></i>
+        </div>
+        <input type="text" id="to" placeholder="To (e.g. Puri)">
     </div>
     <button class="search-btn" onclick="searchBus()">
         <i class="fa fa-search"></i> Search Bus
@@ -161,10 +159,10 @@ body{
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
-    <div class="active"><i class="fa fa-house"></i><br>Home</div>
-    <div><i class="fa fa-bus"></i><br>Bus</div>
-    <div><i class="fa fa-bookmark"></i><br>Save</div>
-    <div><i class="fa fa-user"></i><br>Profile</div>
+    <div class="active" onclick="navClick('Home')"><i class="fa fa-house"></i><br>Home</div>
+    <div onclick="navClick('Bus')"><i class="fa fa-bus"></i><br>Bus</div>
+    <div onclick="navClick('Save')"><i class="fa fa-bookmark"></i><br>Save</div>
+    <div onclick="navClick('Profile')"><i class="fa fa-user"></i><br>Profile</div>
 </div>
 
 <script>
@@ -181,20 +179,30 @@ const busList = document.getElementById("busList");
 function showBuses(list){
     busList.innerHTML = "";
     if(list.length === 0){
-        busList.innerHTML = "<p>No buses found 🚫</p>";
+        busList.innerHTML = "<p>No buses found ❌</p>";
         return;
     }
     list.forEach(bus=>{
         busList.innerHTML += `
         <div class="bus-card">
             <h3>${bus.name}</h3>
-            <p>Route: ${bus.from} → ${bus.to}</p>
+            <p>${bus.from} → ${bus.to}</p>
             <p class="time">🕒 ${bus.time}</p>
         </div>`;
     });
 }
-
 showBuses(buses);
+
+function searchBus(){
+    const from = document.getElementById("from").value.toLowerCase();
+    const to = document.getElementById("to").value.toLowerCase();
+
+    const filtered = buses.filter(bus =>
+        bus.from.toLowerCase().includes(from) &&
+        bus.to.toLowerCase().includes(to)
+    );
+    showBuses(filtered);
+}
 
 function swapLocation(){
     let from = document.getElementById("from");
@@ -202,16 +210,8 @@ function swapLocation(){
     [from.value, to.value] = [to.value, from.value];
 }
 
-function searchBus(){
-    let from = document.getElementById("from").value.toLowerCase();
-    let to = document.getElementById("to").value.toLowerCase();
-
-    let filtered = buses.filter(bus =>
-        bus.from.toLowerCase().includes(from) &&
-        bus.to.toLowerCase().includes(to)
-    );
-
-    showBuses(filtered);
+function navClick(name){
+    alert(name + " clicked");
 }
 </script>
 
