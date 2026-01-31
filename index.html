@@ -8,7 +8,7 @@
 <!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-<!-- Font Awesome Icons -->
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
@@ -23,7 +23,7 @@ body{
     padding-bottom:70px;
 }
 
-/* TOP NAVBAR */
+/* TOP NAV */
 .top-nav{
     position:fixed;
     top:0;
@@ -36,9 +36,6 @@ body{
     align-items:center;
     z-index:1000;
 }
-.top-nav h2{
-    font-size:20px;
-}
 .login-btn{
     background:#fff;
     color:#0a3d62;
@@ -48,9 +45,47 @@ body{
     cursor:pointer;
 }
 
-/* CONTENT */
+/* SEARCH BOX */
+.search-box{
+    margin-top:75px;
+    background:#fff;
+    padding:15px;
+    border-radius:14px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    margin-left:15px;
+    margin-right:15px;
+}
+.search-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+.search-row input{
+    flex:1;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:14px;
+}
+.swap-btn{
+    font-size:20px;
+    color:#0a3d62;
+    cursor:pointer;
+}
+.search-btn{
+    margin-top:10px;
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    background:#0a3d62;
+    color:#fff;
+    font-size:15px;
+    cursor:pointer;
+}
+
+/* BUS LIST */
 .container{
-    margin-top:70px;
     padding:15px;
 }
 .bus-card{
@@ -62,19 +97,18 @@ body{
 }
 .bus-card h3{
     color:#0a3d62;
-    margin-bottom:6px;
 }
 .bus-card p{
     font-size:14px;
     color:#444;
 }
 .time{
-    margin-top:8px;
+    margin-top:6px;
     font-weight:600;
     color:#27ae60;
 }
 
-/* BOTTOM NAVBAR */
+/* BOTTOM NAV */
 .bottom-nav{
     position:fixed;
     bottom:0;
@@ -89,15 +123,15 @@ body{
     text-align:center;
     font-size:12px;
     color:#555;
+    cursor:pointer;
 }
 .bottom-nav i{
     font-size:18px;
-    margin-bottom:3px;
     color:#0a3d62;
 }
 .active{
-    color:#0a3d62;
     font-weight:600;
+    color:#0a3d62;
 }
 </style>
 </head>
@@ -110,7 +144,19 @@ body{
     <div class="login-btn">Login</div>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- SEARCH -->
+<div class="search-box">
+    <div class="search-row">
+        <input type="text" id="from" placeholder="From (City)">
+        <i class="fa fa-arrow-right-arrow-left swap-btn" onclick="swapLocation()"></i>
+        <input type="text" id="to" placeholder="To (City)">
+    </div>
+    <button class="search-btn" onclick="searchBus()">
+        <i class="fa fa-search"></i> Search Bus
+    </button>
+</div>
+
+<!-- BUS LIST -->
 <div class="container" id="busList"></div>
 
 <!-- BOTTOM NAV -->
@@ -123,29 +169,50 @@ body{
 
 <script>
 const buses = [
- {name:"Puri Express", route:"Bhubaneswar → Puri", time:"06:00 AM"},
- {name:"Konark Rider", route:"Bhubaneswar → Konark", time:"07:30 AM"},
- {name:"Utkal Volvo", route:"Cuttack → Rourkela", time:"05:45 AM"},
- {name:"Kalinga Travels", route:"Berhampur → Bhubaneswar", time:"08:00 AM"},
- {name:"Odisha Roadways", route:"Balasore → Bhubaneswar", time:"09:15 AM"},
- {name:"Samaleswari Bus", route:"Sambalpur → Bhubaneswar", time:"04:30 AM"},
- {name:"Jagannath Express", route:"Puri → Cuttack", time:"10:00 AM"},
- {name:"Dhauli Bus", route:"Bhubaneswar → Dhenkanal", time:"11:20 AM"},
- {name:"Mahanadi Rider", route:"Cuttack → Angul", time:"12:45 PM"},
- {name:"Chilika Express", route:"Bhubaneswar → Chilika", time:"02:00 PM"},
+ {name:"Puri Express", from:"Bhubaneswar", to:"Puri", time:"06:00 AM"},
+ {name:"Konark Rider", from:"Bhubaneswar", to:"Konark", time:"07:30 AM"},
+ {name:"Utkal Volvo", from:"Cuttack", to:"Rourkela", time:"05:45 AM"},
+ {name:"Kalinga Travels", from:"Berhampur", to:"Bhubaneswar", time:"08:00 AM"},
+ {name:"Odisha Roadways", from:"Balasore", to:"Bhubaneswar", time:"09:15 AM"},
 ];
 
 const busList = document.getElementById("busList");
 
-buses.forEach(bus=>{
-    busList.innerHTML += `
-    <div class="bus-card">
-        <h3>${bus.name}</h3>
-        <p>Route: ${bus.route}</p>
-        <p class="time">🕒 ${bus.time}</p>
-    </div>
-    `;
-});
+function showBuses(list){
+    busList.innerHTML = "";
+    if(list.length === 0){
+        busList.innerHTML = "<p>No buses found 🚫</p>";
+        return;
+    }
+    list.forEach(bus=>{
+        busList.innerHTML += `
+        <div class="bus-card">
+            <h3>${bus.name}</h3>
+            <p>Route: ${bus.from} → ${bus.to}</p>
+            <p class="time">🕒 ${bus.time}</p>
+        </div>`;
+    });
+}
+
+showBuses(buses);
+
+function swapLocation(){
+    let from = document.getElementById("from");
+    let to = document.getElementById("to");
+    [from.value, to.value] = [to.value, from.value];
+}
+
+function searchBus(){
+    let from = document.getElementById("from").value.toLowerCase();
+    let to = document.getElementById("to").value.toLowerCase();
+
+    let filtered = buses.filter(bus =>
+        bus.from.toLowerCase().includes(from) &&
+        bus.to.toLowerCase().includes(to)
+    );
+
+    showBuses(filtered);
+}
 </script>
 
 </body>
