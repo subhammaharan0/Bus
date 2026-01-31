@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odisha Bus Time</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins', sans-serif;
+}
+body{
+    background:#f4f6f8;
+    padding-bottom:70px;
+}
+
+/* TOP NAVBAR */
+.top-nav{
+    position:fixed;
+    top:0;
+    width:100%;
+    background:#0a3d62;
+    color:#fff;
+    padding:12px 16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    z-index:1000;
+}
+.top-nav h2{
+    font-size:20px;
+}
+.login-btn{
+    background:#fff;
+    color:#0a3d62;
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:14px;
+    cursor:pointer;
+}
+
+/* CONTENT */
+.container{
+    margin-top:70px;
+    padding:15px;
+}
+.bus-card{
+    background:#fff;
+    border-radius:14px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+.bus-card h3{
+    color:#0a3d62;
+    margin-bottom:6px;
+}
+.bus-card p{
+    font-size:14px;
+    color:#444;
+}
+.time{
+    margin-top:8px;
+    font-weight:600;
+    color:#27ae60;
+}
+
+/* BOTTOM NAVBAR */
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    background:#fff;
+    display:flex;
+    justify-content:space-around;
+    padding:10px 0;
+    border-top:1px solid #ddd;
+}
+.bottom-nav div{
+    text-align:center;
+    font-size:12px;
+    color:#555;
+}
+.bottom-nav i{
+    font-size:18px;
+    margin-bottom:3px;
+    color:#0a3d62;
+}
+.active{
+    color:#0a3d62;
+    font-weight:600;
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOP NAV -->
+<div class="top-nav">
+    <h2>🚌 Odisha Bus Time</h2>
+    <div class="login-btn">Login</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container" id="busList"></div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+    <div class="active"><i class="fa fa-house"></i><br>Home</div>
+    <div><i class="fa fa-bus"></i><br>Bus</div>
+    <div><i class="fa fa-bookmark"></i><br>Save</div>
+    <div><i class="fa fa-user"></i><br>Profile</div>
+</div>
+
+<script>
+const buses = [
+ {name:"Puri Express", route:"Bhubaneswar → Puri", time:"06:00 AM"},
+ {name:"Konark Rider", route:"Bhubaneswar → Konark", time:"07:30 AM"},
+ {name:"Utkal Volvo", route:"Cuttack → Rourkela", time:"05:45 AM"},
+ {name:"Kalinga Travels", route:"Berhampur → Bhubaneswar", time:"08:00 AM"},
+ {name:"Odisha Roadways", route:"Balasore → Bhubaneswar", time:"09:15 AM"},
+ {name:"Samaleswari Bus", route:"Sambalpur → Bhubaneswar", time:"04:30 AM"},
+ {name:"Jagannath Express", route:"Puri → Cuttack", time:"10:00 AM"},
+ {name:"Dhauli Bus", route:"Bhubaneswar → Dhenkanal", time:"11:20 AM"},
+ {name:"Mahanadi Rider", route:"Cuttack → Angul", time:"12:45 PM"},
+ {name:"Chilika Express", route:"Bhubaneswar → Chilika", time:"02:00 PM"},
+];
+
+const busList = document.getElementById("busList");
+
+buses.forEach(bus=>{
+    busList.innerHTML += `
+    <div class="bus-card">
+        <h3>${bus.name}</h3>
+        <p>Route: ${bus.route}</p>
+        <p class="time">🕒 ${bus.time}</p>
+    </div>
+    `;
+});
+</script>
+
+</body>
+</html>
